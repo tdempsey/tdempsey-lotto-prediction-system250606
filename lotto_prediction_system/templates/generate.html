@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Generate Seed Data{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Generate Seed Data</h2>
+    <p>Create synthetic lottery draw data for testing and analysis.</p>
+    
+    <form method="POST" action="/generate">
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h3>Basic Settings</h3>
+                
+                <label for="draws">Number of Draws:</label>
+                <input type="number" id="draws" name="draws" value="1000" min="10" max="10000">
+                
+                <label for="numbers">Numbers per Draw:</label>
+                <input type="number" id="numbers" name="numbers" value="5" min="1" max="20">
+                
+                <label for="max_number">Maximum Number:</label>
+                <input type="number" id="max_number" name="max_number" value="42" min="10" max="99">
+            </div>
+            
+            <div style="flex: 1; min-width: 250px;">
+                <h3>Column Settings</h3>
+                
+                <label for="type">Generation Type:</label>
+                <select id="type" name="type">
+                    <option value="column-balanced" selected>Column-Balanced</option>
+                    <option value="random">Pure Random</option>
+                </select>
+                
+                <label for="columns">Number of Columns:</label>
+                <input type="number" id="columns" name="columns" value="5" min="2" max="10">
+                
+                <div id="column-description">
+                    <p><strong>Column Ranges (for 5 columns with max 42):</strong></p>
+                    <ul>
+                        <li>Column 1: Numbers 1-8</li>
+                        <li>Column 2: Numbers 9-17</li>
+                        <li>Column 3: Numbers 18-25</li>
+                        <li>Column 4: Numbers 26-34</li>
+                        <li>Column 5: Numbers 35-42</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn">Generate Data</button>
+    </form>
+</div>
+
+<script>
+    // Update column ranges when inputs change
+    function updateColumnRanges() {
+        const columns = parseInt(document.getElementById('columns').value) || 5;
+        const maxNumber = parseInt(document.getElementById('max_number').value) || 42;
+        const type = document.getElementById('type').value;
+        
+        // Only show column ranges for column-balanced type
+        const columnDescription = document.getElementById('column-description');
+        if (type === 'random') {
+            columnDescription.style.display = 'none';
+            return;
+        } else {
+            columnDescription.style.display = 'block';
+        }
+        
+        // Calculate column ranges
+        const numbersPerColumn = Math.floor(maxNumber / columns);
+        const remainder = maxNumber % columns;
+        
+        let html = '<p><strong>Column Ranges:</strong></p><ul>';
+        
+        let start = 1;
+        for (let i = 0; i < columns; i++) {
+            const extra = i < remainder ? 1 : 0;
+            const count = numbersPerColumn + extra;
+            const end = start + count - 1;
+            
+            html += `<li>Column ${i+1}: Numbers ${start}-${end}</li>`;
+            start = end + 1;
+        }
+        
+        html += '</ul>';
+        columnDescription.innerHTML = html;
+    }
+    
+    // Add event listeners
+    document.getElementById('columns').addEventListener('change', updateColumnRanges);
+    document.getElementById('max_number').addEventListener('change', updateColumnRanges);
+    document.getElementById('type').addEventListener('change', updateColumnRanges);
+    
+    // Initial update
+    updateColumnRanges();
+</script>
+{% endblock %}

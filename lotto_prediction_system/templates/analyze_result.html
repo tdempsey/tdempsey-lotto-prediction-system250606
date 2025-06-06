@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Lottery Data Analysis Results</h2>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+        <div style="flex: 1; min-width: 300px;">
+            <h3>Analysis Summary</h3>
+            <ul>
+                <li><strong>Total draws analyzed:</strong> {{ summary.draws }}</li>
+                <li><strong>Date range:</strong> {{ summary.date_range }}</li>
+            </ul>
+        </div>
+        
+        <div style="flex: 1; min-width: 300px;">
+            <h3>Actions</h3>
+            <a href="/predict" class="btn">Generate Predictions</a>
+        </div>
+    </div>
+    
+    {% if summary.plots %}
+    <div class="chart-container">
+        <h3>Visualizations</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+            {% if summary.plots.frequency %}
+            <div style="flex: 1; min-width: 300px; text-align: center;">
+                <h4>Number Frequency</h4>
+                <img src="/static/plots/{{ timestamp }}/{{ summary.plots.frequency }}" alt="Number Frequency Chart" style="max-width: 100%;">
+            </div>
+            {% endif %}
+            
+            {% if summary.plots.columns %}
+            <div style="flex: 1; min-width: 300px; text-align: center;">
+                <h4>Column Distribution</h4>
+                <img src="/static/plots/{{ timestamp }}/{{ summary.plots.columns }}" alt="Column Distribution Chart" style="max-width: 100%;">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Frequency Analysis</h3>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        <div style="flex: 1; min-width: 300px;">
+            <h4>Hot Numbers (Most Frequent)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Frequency</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in summary.hot_numbers %}
+                    <tr>
+                        <td>{{ item.number }}</td>
+                        <td>{{ item.frequency }}</td>
+                        <td>{{ "%.1f"|format(item.frequency / summary.draws * 100) }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="flex: 1; min-width: 300px;">
+            <h4>Cold Numbers (Least Frequent)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Frequency</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in summary.cold_numbers %}
+                    <tr>
+                        <td>{{ item.number }}</td>
+                        <td>{{ item.frequency }}</td>
+                        <td>{{ "%.1f"|format(item.frequency / summary.draws * 100) }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% if summary.columns %}
+<div class="card">
+    <h3>Column Analysis</h3>
+    
+    <h4>Column Ranges</h4>
+    <div style="display: flex; flex-wrap: wrap;">
+        {% for column in summary.columns %}
+        <div style="flex: 1; min-width: 150px; border: 1px solid #ddd; margin: 5px; padding: 10px; border-radius: 4px; text-align: center;">
+            <h5>Column {{ column.id }}</h5>
+            <div style="background-color: #3498db; color: white; padding: 10px; border-radius: 4px;">
+                Numbers {{ column.range }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <h4>Recommended Number Distribution</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Column</th>
+                <th>Recommended Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in summary.column_distribution %}
+            <tr>
+                <td>Column {{ item.column }}</td>
+                <td>{{ item.count }} number(s)</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h4>Hot Numbers by Column</h4>
+    <div style="display: flex; flex-wrap: wrap;">
+        {% for col_name, numbers in summary.hot_by_column.items() %}
+        <div style="flex: 1; min-width: 150px; border: 1px solid #ddd; margin: 5px; padding: 10px; border-radius: 4px;">
+            <h5>{{ col_name }}</h5>
+            <div>
+                {% for num in numbers %}
+                <span style="display: inline-block; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; background-color: #3498db; color: white; margin: 3px;">{{ num }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div style="text-align: center; margin-top: 30px;">
+    <a href="/predict" class="btn">Generate Predictions Based on This Analysis</a>
+</div>
+{% endblock %}

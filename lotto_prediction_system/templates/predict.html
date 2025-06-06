@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Generate Predictions{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Generate Lottery Number Predictions</h2>
+    <p>Upload lottery data and generate predictions based on various methods.</p>
+    
+    {% if error %}
+    <div class="error">
+        <p><strong>Error:</strong> {{ error }}</p>
+    </div>
+    {% endif %}
+    
+    <form method="POST" action="/predict" enctype="multipart/form-data">
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h3>Data Selection</h3>
+                
+                <label for="data_file">Historical Data File (CSV):</label>
+                <input type="file" id="data_file" name="data_file" accept=".csv" required>
+                
+                <p><small>The CSV file should contain columns for date and lottery numbers.</small></p>
+            </div>
+            
+            <div style="flex: 1; min-width: 250px;">
+                <h3>Prediction Options</h3>
+                
+                <label for="method">Prediction Method:</label>
+                <select id="method" name="method">
+                    <option value="statistical" selected>Statistical (Frequency-based)</option>
+                    <option value="hot">Hot Numbers</option>
+                    <option value="due">Due Numbers</option>
+                    <option value="random">Pure Random</option>
+                    <option value="ml">Machine Learning</option>
+                </select>
+                
+                <label for="count">Number of Predictions:</label>
+                <input type="number" id="count" name="count" value="5" min="1" max="50">
+                
+                <label for="numbers">Numbers per Draw:</label>
+                <input type="number" id="numbers" name="numbers" value="5" min="1" max="20">
+                
+                <label for="max_number">Maximum Number:</label>
+                <input type="number" id="max_number" name="max_number" value="42" min="10" max="99">
+            </div>
+        </div>
+        
+        <button type="submit" class="btn">Generate Predictions</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Prediction Methods</h3>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        <div style="flex: 1; min-width: 200px;">
+            <h4>Statistical Method</h4>
+            <p>Uses frequency analysis and due number calculations to predict numbers with a weighted probability distribution.</p>
+        </div>
+        
+        <div style="flex: 1; min-width: 200px;">
+            <h4>Hot Numbers Method</h4>
+            <p>Selects numbers from among the most frequently drawn numbers in the historical data.</p>
+        </div>
+        
+        <div style="flex: 1; min-width: 200px;">
+            <h4>Due Numbers Method</h4>
+            <p>Focuses on numbers that haven't appeared recently compared to their expected frequency.</p>
+        </div>
+        
+        <div style="flex: 1; min-width: 200px;">
+            <h4>Pure Random Method</h4>
+            <p>Generates completely random numbers without using any historical patterns.</p>
+        </div>
+        
+        <div style="flex: 1; min-width: 200px;">
+            <h4>Machine Learning Method</h4>
+            <p>Uses machine learning algorithms to detect complex patterns in historical draws.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

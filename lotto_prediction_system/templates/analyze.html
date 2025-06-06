@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Analyze Lottery Data{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Analyze Lottery Data</h2>
+    <p>Upload lottery data to analyze patterns, frequencies, and column distributions.</p>
+    
+    {% if error %}
+    <div class="error">
+        <p><strong>Error:</strong> {{ error }}</p>
+    </div>
+    {% endif %}
+    
+    <form method="POST" action="/analyze" enctype="multipart/form-data">
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+            <div style="flex: 1; min-width: 250px;">
+                <h3>Data Selection</h3>
+                
+                <label for="data_file">Data File (CSV):</label>
+                <input type="file" id="data_file" name="data_file" accept=".csv" required>
+                
+                <p><small>The CSV file should contain columns for date and lottery numbers.</small></p>
+            </div>
+            
+            <div style="flex: 1; min-width: 250px;">
+                <h3>Analysis Options</h3>
+                
+                <label for="columns">Number of Columns:</label>
+                <input type="number" id="columns" name="columns" value="5" min="2" max="10">
+                
+                <label for="generate_plots">
+                    <input type="checkbox" id="generate_plots" name="generate_plots" checked>
+                    Generate Visualization Plots
+                </label>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn">Analyze Data</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Sample Analysis</h3>
+    <p>Here's what you can expect from the analysis:</p>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        <div style="flex: 1; min-width: 200px;">
+            <h4>Basic Statistics</h4>
+            <ul>
+                <li>Number frequencies</li>
+                <li>Hot and cold numbers</li>
+                <li>Gap analysis</li>
+                <li>Pair and triplet analysis</li>
+                <li>Even/odd distribution</li>
+            </ul>
+        </div>
+        
+        <div style="flex: 1; min-width: 200px;">
+            <h4>Column Analysis</h4>
+            <ul>
+                <li>Distribution across columns</li>
+                <li>Column pattern detection</li>
+                <li>Hot numbers by column</li>
+                <li>Optimal column distribution</li>
+            </ul>
+        </div>
+        
+        <div style="flex: 1; min-width: 200px;">
+            <h4>Visualizations</h4>
+            <ul>
+                <li>Frequency charts</li>
+                <li>Column distribution charts</li>
+                <li>Time-based pattern charts</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

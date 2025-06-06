@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Results{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Lottery Number Predictions</h2>
+    <p>Here are your generated predictions using the <strong>{{ method }}</strong> method:</p>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 30px 0;">
+        {% for pred in predictions %}
+        <div style="border: 1px solid #ddd; border-radius: 5px; padding: 15px; text-align: center; min-width: 200px;">
+            <h3>Prediction {{ pred.id }}</h3>
+            <div style="margin: 15px 0;">
+                {% for num in pred.numbers %}
+                <span style="display: inline-block; width: 40px; height: 40px; line-height: 40px; text-align: center; border-radius: 50%; background-color: #3498db; color: white; margin: 5px; font-weight: bold;">{{ num }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px;">
+        <h3>About the {{ method }} Method</h3>
+        
+        {% if method == 'statistical' %}
+        <p>The statistical method uses frequency analysis and gap statistics to create a weighted probability distribution. Numbers are selected based on their historical frequency and how "due" they are to appear.</p>
+        {% elif method == 'hot' %}
+        <p>The hot numbers method selects numbers from among the most frequently drawn numbers in the historical data. These are the numbers that have appeared most often in past draws.</p>
+        {% elif method == 'due' %}
+        <p>The due numbers method focuses on numbers that haven't appeared recently compared to their expected frequency. These are numbers that are statistically "overdue" to appear.</p>
+        {% elif method == 'random' %}
+        <p>The pure random method generates completely random numbers without using any historical patterns. This is similar to how actual lottery drawings work.</p>
+        {% elif method == 'ml' %}
+        <p>The machine learning method uses a Random Forest algorithm to detect complex patterns in historical draws, considering factors like frequency in different time windows, gaps between appearances, and time-based patterns.</p>
+        {% endif %}
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <h3>Next Steps</h3>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <a href="/predict" class="btn">Generate More Predictions</a>
+            <a href="/analyze" class="btn">Analyze More Data</a>
+            <a href="/generate" class="btn">Generate New Test Data</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Disclaimer</h3>
+    <p>These predictions are generated for educational and entertainment purposes only. There is no guaranteed way to predict lottery numbers, as lottery drawings are designed to be random events. Use at your own risk.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Lotto Prediction System - Home{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Welcome to the Lotto Prediction System</h2>
+    <p>This system allows you to analyze lottery data and generate predictions based on various methods.</p>
+    
+    <h3>Features:</h3>
+    <ul>
+        <li>Generate seed data for testing and development</li>
+        <li>Analyze historical lottery data to find patterns</li>
+        <li>Generate predictions using multiple methods</li>
+        <li>Column-based analysis for improved insights</li>
+    </ul>
+    
+    <h3>Getting Started:</h3>
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 250px; margin: 10px;">
+            <h4>Generate Data</h4>
+            <p>Create test data with 1000 draws to experiment with the system.</p>
+            <a href="/generate" class="btn">Generate Data</a>
+        </div>
+        
+        <div style="flex: 1; min-width: 250px; margin: 10px;">
+            <h4>Analyze Data</h4>
+            <p>Upload lottery data and analyze patterns, frequencies, and more.</p>
+            <a href="/analyze" class="btn">Analyze Data</a>
+        </div>
+        
+        <div style="flex: 1; min-width: 250px; margin: 10px;">
+            <h4>Predict Numbers</h4>
+            <p>Generate lottery number predictions based on historical data.</p>
+            <a href="/predict" class="btn">Predict Numbers</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>About Column Analysis</h3>
+    <p>This system features an innovative column-based analysis approach that divides the number range into sections or "columns". This can provide insights into how numbers are distributed across different ranges.</p>
+    
+    <p>For example, in a 5/42 lottery game with 5 columns:</p>
+    <ul>
+        <li><strong>Column 1:</strong> Numbers 1-8</li>
+        <li><strong>Column 2:</strong> Numbers 9-17</li>
+        <li><strong>Column 3:</strong> Numbers 18-25</li>
+        <li><strong>Column 4:</strong> Numbers 26-34</li>
+        <li><strong>Column 5:</strong> Numbers 35-42</li>
+    </ul>
+    
+    <p>The system analyzes how numbers are distributed across these columns in historical draws and can recommend optimal column distributions for future picks.</p>
+</div>
+{% endblock %}
